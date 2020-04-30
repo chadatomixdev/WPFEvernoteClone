@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WPFNotes.Models;
 using WPFNotes.ViewModels;
 
 namespace WPFNotes.Commands
@@ -21,11 +22,18 @@ namespace WPFNotes.Commands
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            Notebook selectedNotebook = parameter as Notebook;
+
+            if (selectedNotebook != null)
+                 return true;
+
+            return false;
         }
 
         public void Execute(object parameter)
         {
+            Notebook selectedNotebook = parameter as Notebook;
+            NotesViewModel.CreateNote(selectedNotebook.Id);
         }
     }
 }

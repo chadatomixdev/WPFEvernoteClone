@@ -26,6 +26,7 @@ namespace WPFNotes.Commands
 
         public void Execute(object parameter)
         {
+            NotesViewModel.CreateNotebook();
         }
     }
 }

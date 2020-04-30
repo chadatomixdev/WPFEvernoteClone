@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WPFNotes.Commands;
+using WPFNotes.Helpers;
 using WPFNotes.Models;
 
 namespace WPFNotes.ViewModels
@@ -33,5 +34,29 @@ namespace WPFNotes.ViewModels
 			NewNotebookCommand = new NewNotebookCommand(this);
 			NewNoteCommand = new NewNoteCommand(this);
 		}
+
+		public void CreateNotebook()
+		{
+			Notebook newNotebook = new Notebook
+			{
+				Name = "New Notebook"
+			};
+
+			DatabaseHelper.Insert(newNotebook);
+		}
+
+		public void CreateNote(int notebookId)
+		{
+			Note newNote = new Note
+			{
+				NotebookId = notebookId,
+				CreatedTime = DateTime.Now,
+				UpdatedTime = DateTime.Now,
+				Title = "New Note"
+			};
+
+			DatabaseHelper.Insert(newNote);
+		}
+
 	}
 }
