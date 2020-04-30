@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace WPFNotes.Models
     public class Notebook : INotifyPropertyChanged
     {
         private int id;
+
+        [PrimaryKey, AutoIncrement]
 
         public int Id
         {
@@ -23,6 +26,7 @@ namespace WPFNotes.Models
 
         private int userId;
 
+        [Indexed]
         public int UserId
         {
             get { return userId; }
@@ -51,6 +55,5 @@ namespace WPFNotes.Models
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
     }
 }

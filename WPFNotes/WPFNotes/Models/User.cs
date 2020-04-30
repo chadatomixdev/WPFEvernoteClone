@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace WPFNotes.Models
     {
         private int id;
 
+        [PrimaryKey,AutoIncrement]
         public int Id
         {
             get { return id; }
@@ -23,6 +25,7 @@ namespace WPFNotes.Models
 
         private string name;
 
+        [MaxLength(50)]
         public string Name
         {
             get { return name; }
@@ -34,7 +37,8 @@ namespace WPFNotes.Models
         }
 
         private string lastname;
-
+       
+        [MaxLength(50)]
         public string Lastname
         {
             get { return lastname; }
