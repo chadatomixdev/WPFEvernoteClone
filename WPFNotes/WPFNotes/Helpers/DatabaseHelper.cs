@@ -10,7 +10,7 @@ namespace WPFNotes.Helpers
 {
     public class DatabaseHelper
     {
-        private static readonly string dbFile = Path.Combine(Environment.CurrentDirectory, "NotesDb.db3");
+        public static readonly string dbFile = Path.Combine(Environment.CurrentDirectory, "NotesDb.db3");
 
         public static bool Insert<T>(T item)
         {

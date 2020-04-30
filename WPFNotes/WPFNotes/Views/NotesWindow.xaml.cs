@@ -28,5 +28,17 @@ namespace WPFNotes.Views
         {
             Application.Current.Shutdown();
         }
+
+        private void RichTextBoxContent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int amountOfCharacters = (new TextRange(RichTextBoxContent.Document.ContentStart, RichTextBoxContent.Document.ContentEnd)).Text.Length;
+
+            TextBlockStatus.Text = $"Document Length: {amountOfCharacters} characters";
+        }
+
+        private void buttonBold_Click(object sender, RoutedEventArgs e)
+        {
+            RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+        }
     }
 }

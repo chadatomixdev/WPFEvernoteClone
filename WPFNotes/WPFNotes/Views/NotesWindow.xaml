@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:WPFNotes.Views"
         xmlns:vm="clr-namespace:WPFNotes.ViewModels"
         mc:Ignorable="d"
-        Title="NotesWindow" Height="450" Width="800">
+        Title="NotesWindow" Height="400" Width="600">
 
     <Window.Resources>
         <vm:NotesViewModel x:Key="vm"/>
     </Window.Resources>
-    
+
     <DockPanel DataContext="{StaticResource vm}">
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -21,10 +21,52 @@
                           Command="{Binding NewNoteCommand}"
                           CommandParameter="{Binding SelectedNotebook}"/>
                 <Separator/>
-                <MenuItem Header="Exit" x:Name="MenuItemExit" Click="MenuItemExit_Click"></MenuItem>
+                <MenuItem Header="Exit" x:Name="MenuItemExit" 
+                          Click="MenuItemExit_Click"></MenuItem>
             </MenuItem>
         </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem>
+                <TextBlock x:Name="TextBlockStatus"></TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+
+        <ListView Width="140" 
+                  DockPanel.Dock="Left"
+                  ItemsSource="{Binding Notebooks}"
+                  SelectedItem="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"></TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ListView
+            Width="140" 
+            DockPanel.Dock="Left" 
+            ItemsSource="{Binding Notes}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Title}"></TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+                <Button Content="Speech"></Button>
+                <Button x:Name="buttonBold" Click="buttonBold_Click">
+                    <TextBlock Text="B" FontWeight="Bold" ></TextBlock>
+                </Button>
+            </ToolBar>
+        </ToolBarTray>
+
         <Grid>
+
+            <RichTextBox x:Name="RichTextBoxContent" TextChanged="RichTextBoxContent_TextChanged">
+            </RichTextBox>
         </Grid>
     </DockPanel>
 </Window>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,49 +15,86 @@ namespace WPFNotes.ViewModels
     {
         public ObservableCollection<Notebook> Notebooks { get; set; }
 
-		private Notebook selectedNotebook;
+        private Notebook selectedNotebook;
 
-		public Notebook SelectedNotebook
-		{
-			get { return selectedNotebook; }
-			set { 
-				selectedNotebook = value; 
-				//TODO: Get Notes
-			}
-		}
-		public	ObservableCollection<Note> Notes { get; set; }
-		public  NewNotebookCommand NewNotebookCommand { get; set; }
+        public Notebook SelectedNotebook
+        {
+            get { return selectedNotebook; }
+            set
+            {
+                selectedNotebook = value;
+                //TODO: Get Notes
+            }
+        }
+        public ObservableCollection<Note> Notes { get; set; }
+        public NewNotebookCommand NewNotebookCommand { get; set; }
 
-		public NewNoteCommand NewNoteCommand { get; set; }
+        public NewNoteCommand NewNoteCommand { get; set; }
 
-		public NotesViewModel()
-		{
-			NewNotebookCommand = new NewNotebookCommand(this);
-			NewNoteCommand = new NewNoteCommand(this);
-		}
+        public NotesViewModel()
+        {
+            NewNotebookCommand = new NewNotebookCommand(this);
+            NewNoteCommand = new NewNoteCommand(this);
 
-		public void CreateNotebook()
-		{
-			Notebook newNotebook = new Notebook
-			{
-				Name = "New Notebook"
-			};
+            Notebooks = new ObservableCollection<Notebook>();
+            Notes = new ObservableCollection<Note>();
 
-			DatabaseHelper.Insert(newNotebook);
-		}
+            ReadNotebooks();
+        }
 
-		public void CreateNote(int notebookId)
-		{
-			Note newNote = new Note
-			{
-				NotebookId = notebookId,
-				CreatedTime = DateTime.Now,
-				UpdatedTime = DateTime.Now,
-				Title = "New Note"
-			};
+        public void CreateNotebook()
+        {
+            Notebook newNotebook = new Notebook
+            {
+                Name = "New Notebook"
+            };
 
-			DatabaseHelper.Insert(newNote);
-		}
+            DatabaseHelper.Insert(newNotebook);
+        }
 
-	}
+        public void CreateNote(int notebookId)
+        {
+            Note newNote = new Note
+            {
+                NotebookId = notebookId,
+                CreatedTime = DateTime.Now,
+                UpdatedTime = DateTime.Now,
+                Title = "New Note"
+            };
+
+            DatabaseHelper.Insert(newNote);
+        }
+
+        public void ReadNotebooks()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(DatabaseHelper.dbFile))
+            {
+                var notebooks = connection.Table<Notebook>().ToList();
+
+                Notebooks.Clear();
+
+                foreach (var notebook in notebooks)
+                {
+                    Notebooks.Add(notebook);
+                }
+            }
+        }
+
+        public void ReadNotes()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(DatabaseHelper.dbFile))
+            {
+                if (SelectedNotebook != null)
+                {
+                    var notes = connection.Table<Note>().Where(n => n.NotebookId == selectedNotebook.Id).ToList();
+                    Notes.Clear();
+
+                    foreach (var note in notes)
+                    {
+                        Notes.Add(note);
+                    }
+                }
+            }
+        }
+    }
 }
