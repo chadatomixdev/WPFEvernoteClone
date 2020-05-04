@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Speech.Recognition;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,9 +21,33 @@ namespace WPFNotes.Views
     /// </summary>
     public partial class NotesWindow : Window
     {
+        SpeechRecognitionEngine recogniser;
+        bool isRecognising = false;
+
         public NotesWindow()
         {
             InitializeComponent();
+
+
+            var currentCulture = (from r in SpeechRecognitionEngine.InstalledRecognizers()
+                                 where r.Culture.Equals(Thread.CurrentThread.CurrentCulture)
+                                 select r).FirstOrDefault();
+
+            recogniser = new SpeechRecognitionEngine(currentCulture);
+            
+            var builder = new GrammarBuilder();
+            builder.AppendDictation();
+            Grammar grammar = new Grammar(builder);
+            recogniser.LoadGrammar(grammar);
+            recogniser.SetInputToDefaultAudioDevice();
+
+            recogniser.SpeechRecognized += Recogniser_SpeechRecognized;
+        }
+
+        private void Recogniser_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
+        {
+            string recognisedText = e.Result.Text;
+            RichTextBoxContent.Document.Blocks.Add(new Paragraph(new Run(recognisedText)));
         }
 
         private void MenuItemExit_Click(object sender, RoutedEventArgs e)
@@ -39,6 +65,20 @@ namespace WPFNotes.Views
         private void buttonBold_Click(object sender, RoutedEventArgs e)
         {
             RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+        }
+
+        private void buttonSpeach_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isRecognising)
+            {
+                recogniser.RecognizeAsync(RecognizeMode.Multiple);
+                isRecognising = true;
+            }
+            else
+            {
+                recogniser.RecognizeAsyncStop();
+                isRecognising = false;
+            }
         }
     }
 }

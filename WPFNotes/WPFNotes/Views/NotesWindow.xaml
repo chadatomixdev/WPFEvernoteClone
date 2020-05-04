@@ -56,7 +56,10 @@
 
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
-                <Button Content="Speech"></Button>
+                <Button Content="Speech" 
+                        x:Name="buttonSpeach"
+                        Click="buttonSpeach_Click"
+                        ></Button>
                 <Button x:Name="buttonBold" Click="buttonBold_Click">
                     <TextBlock Text="B" FontWeight="Bold" ></TextBlock>
                 </Button>
