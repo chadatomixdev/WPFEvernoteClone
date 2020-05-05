@@ -42,6 +42,12 @@ namespace WPFNotes.Views
             recogniser.SetInputToDefaultAudioDevice();
 
             recogniser.SpeechRecognized += Recogniser_SpeechRecognized;
+
+            var fontFamilies = Fonts.SystemFontFamilies.OrderBy(f => f.Source);
+            comboBoxFontFamily.ItemsSource = fontFamilies;
+
+            List<double> fontSizes = new List<double>() { 8, 9, 10, 11, 12, 14, 16, 28, 48, 72 };
+            comboboxFontSize.ItemsSource = fontSizes;
         }
 
         private void Recogniser_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
@@ -99,6 +105,9 @@ namespace WPFNotes.Views
 
             var selectedDecoration = RichTextBoxContent.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
             buttonUnderline.IsChecked = (selectedDecoration != DependencyProperty.UnsetValue) && (selectedDecoration.Equals(TextDecorations.Underline));
+
+            comboBoxFontFamily.SelectedItem = RichTextBoxContent.Selection.GetPropertyValue(Inline.FontFamilyProperty);
+            comboboxFontSize.Text = RichTextBoxContent.Selection.GetPropertyValue(Inline.FontSizeProperty).ToString();
         }
 
         private void buttonItalic_Click(object sender, RoutedEventArgs e)
@@ -127,6 +136,19 @@ namespace WPFNotes.Views
                 (RichTextBoxContent.Selection.GetPropertyValue(Inline.TextDecorationsProperty) as TextDecorationCollection).TryRemove(TextDecorations.Underline, out textDecorations);
                 RichTextBoxContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, textDecorations);
             }
+        }
+
+        private void comboBoxFontFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxFontFamily.SelectedItem != null)
+            {
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, comboBoxFontFamily.SelectedItem);
+            }
+        }
+
+        private void comboboxFontSize_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontSizeProperty, comboboxFontSize.Text);
         }
     }
 }

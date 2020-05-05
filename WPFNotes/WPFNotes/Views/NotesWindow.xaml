@@ -71,6 +71,17 @@
                 <ToggleButton x:Name="buttonUnderline" Click="buttonUnderline_Click">
                     <TextBlock Text="U" TextDecorations="Underline"></TextBlock>
                 </ToggleButton>
+
+                <ComboBox
+                    x:Name="comboBoxFontFamily"
+                    Width="100"
+                    SelectionChanged="comboBoxFontFamily_SelectionChanged"></ComboBox>
+
+                <ComboBox
+                    x:Name="comboboxFontSize"
+                    Width="50"
+                    IsEditable="True"
+                    TextBoxBase.TextChanged="comboboxFontSize_TextChanged"></ComboBox>
             </ToolBar>
         </ToolBarTray>
 
