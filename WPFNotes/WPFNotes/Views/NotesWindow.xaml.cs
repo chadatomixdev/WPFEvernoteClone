@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -22,7 +23,6 @@ namespace WPFNotes.Views
     public partial class NotesWindow : Window
     {
         SpeechRecognitionEngine recogniser;
-        bool isRecognising = false;
 
         public NotesWindow()
         {
@@ -64,20 +64,68 @@ namespace WPFNotes.Views
 
         private void buttonBold_Click(object sender, RoutedEventArgs e)
         {
-            RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            bool isButtonEnabled = (sender as ToggleButton).IsChecked ?? false;
+            if (isButtonEnabled)
+            {
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+            }
+            else
+            {
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+            }
         }
 
         private void buttonSpeach_Click(object sender, RoutedEventArgs e)
         {
-            if (!isRecognising)
+            bool isButtonEnabled = (sender as ToggleButton).IsChecked ?? false;
+            
+            if (isButtonEnabled)
             {
                 recogniser.RecognizeAsync(RecognizeMode.Multiple);
-                isRecognising = true;
             }
             else
             {
                 recogniser.RecognizeAsyncStop();
-                isRecognising = false;
+            }
+        }
+
+        private void RichTextBoxContent_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            var selectedWeight = RichTextBoxContent.Selection.GetPropertyValue(Inline.FontWeightProperty);
+            buttonBold.IsChecked = (selectedWeight != DependencyProperty.UnsetValue) && (selectedWeight.Equals(FontWeights.Bold));
+
+            var selectedStyle = RichTextBoxContent.Selection.GetPropertyValue(Inline.FontStyleProperty);
+            buttonItalic.IsChecked = (selectedStyle != DependencyProperty.UnsetValue) && (selectedStyle.Equals(FontStyles.Italic));
+
+            var selectedDecoration = RichTextBoxContent.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
+            buttonUnderline.IsChecked = (selectedDecoration != DependencyProperty.UnsetValue) && (selectedDecoration.Equals(TextDecorations.Underline));
+        }
+
+        private void buttonItalic_Click(object sender, RoutedEventArgs e)
+        {
+            bool isButtonEnabled = (sender as ToggleButton).IsChecked ?? false;
+            if (isButtonEnabled)
+            {
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+            }
+            else
+            {
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Normal);
+            }
+        }
+
+        private void buttonUnderline_Click(object sender, RoutedEventArgs e)
+        {
+            bool isButtonEnabled = (sender as ToggleButton).IsChecked ?? false;
+            if (isButtonEnabled)
+            {
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+            }
+            else
+            {
+                TextDecorationCollection textDecorations;
+                (RichTextBoxContent.Selection.GetPropertyValue(Inline.TextDecorationsProperty) as TextDecorationCollection).TryRemove(TextDecorations.Underline, out textDecorations);
+                RichTextBoxContent.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, textDecorations);
             }
         }
     }
