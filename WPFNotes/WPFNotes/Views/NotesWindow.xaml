@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WPFNotes.Views"
         xmlns:vm="clr-namespace:WPFNotes.ViewModels"
+        xmlns:uc="clr-namespace:WPFNotes.Controls"
         mc:Ignorable="d"
         Title="NotesWindow" Height="400" Width="600">
 
@@ -31,14 +32,15 @@
             </StatusBarItem>
         </StatusBar>
 
-        <ListView Width="140" 
+        <ListView Width="150" 
                   DockPanel.Dock="Left"
                   ItemsSource="{Binding Notebooks}"
-                  SelectedItem="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                  SelectedItem="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  Background="MidnightBlue">
 
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}"></TextBlock>
+                    <uc:NotebookControl DisplayNotebook="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
@@ -49,7 +51,7 @@
             ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Title}"></TextBlock>
+                    <uc:NoteControl Note="{Binding}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -23,7 +23,7 @@ namespace WPFNotes.ViewModels
             set
             {
                 selectedNotebook = value;
-                //TODO: Get Notes
+                ReadNotes();
             }
         }
         public ObservableCollection<Note> Notes { get; set; }
@@ -40,6 +40,7 @@ namespace WPFNotes.ViewModels
             Notes = new ObservableCollection<Note>();
 
             ReadNotebooks();
+            ReadNotes();
         }
 
         public void CreateNotebook()
@@ -50,6 +51,8 @@ namespace WPFNotes.ViewModels
             };
 
             DatabaseHelper.Insert(newNotebook);
+
+            ReadNotebooks();
         }
 
         public void CreateNote(int notebookId)
@@ -63,6 +66,7 @@ namespace WPFNotes.ViewModels
             };
 
             DatabaseHelper.Insert(newNote);
+            ReadNotes();
         }
 
         public void ReadNotebooks()
