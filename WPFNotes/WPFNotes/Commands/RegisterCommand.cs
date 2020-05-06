@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using WPFNotes.Models;
 using WPFNotes.ViewModels;
 
 namespace WPFNotes.Commands
@@ -21,11 +18,33 @@ namespace WPFNotes.Commands
 
         public bool CanExecute(object parameter)
         {
+            User user = parameter as User;
+
+            //if (user != null)
+            //{
+
+            //    if (string.IsNullOrEmpty(user.Username))
+            //        return false;
+
+            //    if (string.IsNullOrEmpty(user.Password))
+            //        return false;
+
+            //    if (string.IsNullOrEmpty(user.Email))
+            //        return false;
+
+            //    if (string.IsNullOrEmpty(user.Lastname))
+            //        return false;
+
+            //    if (string.IsNullOrEmpty(user.Name))
+            //        return false;
+            //}
+
             return true;
         }
 
         public void Execute(object parameter)
         {
+            LoginViewModel.Register();
         }
     }
 }

@@ -150,5 +150,16 @@ namespace WPFNotes.Views
         {
             RichTextBoxContent.Selection.ApplyPropertyValue(Inline.FontSizeProperty, comboboxFontSize.Text);
         }
+
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+
+            if (string.IsNullOrEmpty(App.UserId))
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.ShowDialog();
+            }
+        }
     }
 }

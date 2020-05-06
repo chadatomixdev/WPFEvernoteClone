@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WPFNotes.Models;
 using WPFNotes.ViewModels;
 
 namespace WPFNotes.Commands
@@ -21,11 +22,21 @@ namespace WPFNotes.Commands
 
         public bool CanExecute(object parameter)
         {
+            var user = parameter as User;
+
+            //if (user == null)
+            //    return false;
+            //if (string.IsNullOrEmpty(user.Username))
+            //    return false;
+            //if (string.IsNullOrEmpty(user.Password))
+            //    return false;
+
             return true;
         }
 
         public void Execute(object parameter)
         {
+            LoginViewModel.Login();
         }
     }
 }
