@@ -1,10 +1,6 @@
 ﻿using SQLite;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WPFNotes.Commands;
 using WPFNotes.Helpers;
 using WPFNotes.Models;
@@ -14,6 +10,8 @@ namespace WPFNotes.ViewModels
     public class NotesViewModel
     {
         public ObservableCollection<Notebook> Notebooks { get; set; }
+
+        public bool isEditing { get; set; }
 
         private Notebook selectedNotebook;
 
@@ -26,6 +24,7 @@ namespace WPFNotes.ViewModels
                 ReadNotes();
             }
         }
+
         public ObservableCollection<Note> Notes { get; set; }
         public NewNotebookCommand NewNotebookCommand { get; set; }
 
@@ -33,6 +32,7 @@ namespace WPFNotes.ViewModels
 
         public NotesViewModel()
         {
+            isEditing = false;
             NewNotebookCommand = new NewNotebookCommand(this);
             NewNoteCommand = new NewNoteCommand(this);
 

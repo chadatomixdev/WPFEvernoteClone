@@ -89,6 +89,7 @@
     <Compile Include="Controls\NoteControl.xaml.cs">
       <DependentUpon>NoteControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolToVisibility.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\NotesViewModel.cs" />
